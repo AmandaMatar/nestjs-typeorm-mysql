@@ -1,29 +1,36 @@
-import { IsDateString, IsEmail, IsEnum, IsOptional, IsString, IsStrongPassword } from "class-validator";
-import { Role } from "src/enums/role.enum";
+import {
+  IsDateString,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsStrongPassword,
+} from 'class-validator';
+import { Role } from '../../enums/role.enum';
 
 export class CreateUserDTO {
+  @IsString()
+  name: string;
 
-    @IsString()
-    name: string;
+  @IsEmail()
+  email: string;
 
-    @IsEmail()
-    email: string;
+  @IsStrongPassword({
+    minLength: 6,
+    minNumbers: 0,
+    minLowercase: 0,
+    minUppercase: 0,
+    minSymbols: 0,
+  })
+  password: string;
 
-    @IsStrongPassword({
-        minLength: 6,
-        minNumbers: 0,
-        minLowercase: 0,
-        minUppercase: 0,
-        minSymbols: 0
-    })
-    password: string;
+  @IsOptional()
+  @IsDateString()
+  @IsNotEmpty({ message: 'birthAt cannot be an empty string' }) // Nova validação
+  birthAt?: string;
 
-    @IsOptional()
-    @IsDateString()
-    birthAt: string;
-
-    @IsOptional()
-    @IsEnum(Role)
-    role: number;
-
+  @IsOptional()
+  @IsEnum(Role)
+  role?: number;
 }
